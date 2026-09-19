@@ -59,8 +59,18 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            // Persistent connections (opt-in via DB_PERSISTENT) let PHP-FPM
+            // workers reuse an already-open connection instead of opening a
+            // new one on every request. On this host, opening a fresh MySQL
+            // connection can outright fail under load with a PDOException
+            // ("Operation not permitted") — almost certainly a per-account
+            // connection/process cap enforced by the shared-hosting
+            // environment, not a MySQL-side limit (max_user_connections is
+            // 50, and the account is nowhere near that most of the time).
+            // Fewer new connections means fewer chances to hit that cap.
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                \PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', false) ? true : null,
             ]) : [],
         ],
 
