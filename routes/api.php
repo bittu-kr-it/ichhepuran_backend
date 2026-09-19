@@ -49,7 +49,7 @@ Route::get('/user', function (Request $request) {
 // frontend contract can evolve without breaking older deployed builds.
 // Section-wise rather than one combined /home endpoint, so each section
 // is independently reusable across pages and cacheable on its own.
-Route::prefix('v1')->group(function () {
+Route::prefix('v1')->middleware('cache.response:60')->group(function () {
     Route::get('/settings', [SettingsController::class, 'show']);
     Route::get('/home-video-hero', [HomeVideoHeroController::class, 'show']);
     Route::get('/hero-slides', [HeroSlideController::class, 'index']);
