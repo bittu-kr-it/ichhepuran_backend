@@ -1,0 +1,29 @@
+name: Deploy Backend
+
+# Pushing to main deploys straight to the live Hostinger server: pulls the
+# new commit, installs any new composer deps, runs pending migrations, and
+# rebuilds Laravel's caches. No server-side .env or public/storage touch —
+# those stay exactly as they are on the server.
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd domains/ichhepuran.com/public_html/api
+            git pull origin main
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan optimize:clear
+            php artisan optimize
