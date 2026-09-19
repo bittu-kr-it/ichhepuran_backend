@@ -23,7 +23,13 @@ jobs:
             set -e
             cd domains/ichhepuran.com/public_html/api
             git pull origin main
-            composer install --no-dev --optimize-autoloader --no-interaction
+            # --no-scripts: this host disables proc_open (and exec/shell_exec/
+            # popen), so Composer can't spawn the "@php artisan package:discover"
+            # post-autoload-dump hook itself. Running it as our own separate
+            # shell command works fine — the restriction is only on PHP code
+            # spawning subprocesses, not the shell invoking PHP directly.
+            composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+            php artisan package:discover --ansi
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize
