@@ -18,6 +18,7 @@ class SectionHeadingController extends Controller
         'geographic-reach' => ['eyebrow' => 'Where we work', 'heading' => 'Our Geographic Reach'],
         'about-milestones' => ['eyebrow' => 'Our journey', 'heading' => 'Milestones of Impact'],
         'team' => ['eyebrow' => 'The people behind it', 'heading' => 'Meet Our Team'],
+        'advisory-board' => ['eyebrow' => 'Guiding our mission', 'heading' => 'Advisory Board'],
         'trust-badges' => ['eyebrow' => 'Transparency & trust', 'heading' => 'Certified & Accountable'],
         'impact-milestones' => ['eyebrow' => 'Our journey', 'heading' => 'Journey of Impact'],
         'impact-testimonials' => ['eyebrow' => 'Voices of impact', 'heading' => 'Faces of Impact'],

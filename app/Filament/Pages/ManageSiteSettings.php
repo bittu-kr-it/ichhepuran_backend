@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 /**
@@ -85,11 +86,61 @@ class ManageSiteSettings extends Page
                         ->schema([
                             Forms\Components\TextInput::make('label')->required(),
                             Forms\Components\TextInput::make('href')->required()->url(),
+                            Forms\Components\Select::make('icon')
+                                ->label('Icon')
+                                ->options(SiteSetting::SOCIAL_ICON_OPTIONS)
+                                ->native(false)
+                                ->required()
+                                ->default('Website'),
                         ])
-                        ->columns(2),
+                        ->columns(3)
+                        ->reorderable(),
                     Forms\Components\TextInput::make('donate_href')
                         ->required()
                         ->helperText('Where every "Donate Now" button on the site links to.'),
+                ]),
+
+            Section::make('Floating Buttons')
+                ->description('Small round buttons that float over every page — bottom-right corner.')
+                ->schema([
+                    Forms\Components\Toggle::make('call_enabled')
+                        ->label('Show floating Call button')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\TextInput::make('call_number')
+                        ->label('Call number')
+                        ->helperText('Include country code, e.g. +919147708511. Used as-is in the tel: link.')
+                        ->visible(fn (Get $get) => $get('call_enabled'))
+                        ->required(fn (Get $get) => $get('call_enabled')),
+
+                    Forms\Components\Toggle::make('whatsapp_enabled')
+                        ->label('Show floating WhatsApp button')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\TextInput::make('whatsapp_number')
+                        ->label('WhatsApp number')
+                        ->helperText('Include country code, digits only, e.g. 919147708511.')
+                        ->visible(fn (Get $get) => $get('whatsapp_enabled'))
+                        ->required(fn (Get $get) => $get('whatsapp_enabled')),
+                    Forms\Components\TextInput::make('whatsapp_message')
+                        ->label('Pre-filled message')
+                        ->helperText('Optional. Shown as the starting text when a visitor opens the chat.')
+                        ->visible(fn (Get $get) => $get('whatsapp_enabled')),
+
+                    Forms\Components\Toggle::make('ebook_enabled')
+                        ->label('Show floating "Download e-book" button')
+                        ->live()
+                        ->default(false),
+                    Forms\Components\TextInput::make('ebook_label')
+                        ->label('Button label')
+                        ->helperText('Optional. Defaults to "Download e-book".')
+                        ->visible(fn (Get $get) => $get('ebook_enabled')),
+                    Forms\Components\SpatieMediaLibraryFileUpload::make('ebook')
+                        ->collection('ebook')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->maxSize(204800)
+                        ->helperText('Upload the e-book as a PDF. Max file size: 200 MB.')
+                        ->visible(fn (Get $get) => $get('ebook_enabled')),
                 ]),
         ])->statePath('data');
     }
@@ -98,7 +149,7 @@ class ManageSiteSettings extends Page
     {
         $state = $this->form->getState();
 
-        unset($state['logo']);
+        unset($state['logo'], $state['ebook']);
         SiteSetting::current()->update($state);
         $this->form->saveRelationships();
 

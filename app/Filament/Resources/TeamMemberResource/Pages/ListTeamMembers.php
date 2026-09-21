@@ -23,13 +23,19 @@ class ListTeamMembers extends ListRecords
                 'key' => 'team',
                 'defaultEyebrow' => 'The people behind it',
                 'defaultHeading' => 'Meet Our Team',
-                'label' => 'About Page — Section Heading',
+                'label' => 'About Page — "Meet Our Team" heading',
+            ]),
+            SectionHeadingWidget::make([
+                'key' => 'advisory-board',
+                'defaultEyebrow' => 'Guiding our mission',
+                'defaultHeading' => 'Advisory Board',
+                'label' => 'About Page — "Advisory Board" heading',
             ]),
         ];
     }
 
     public function getHeaderWidgetsColumns(): int | array
     {
-        return 1;
+        return 2;
     }
 }

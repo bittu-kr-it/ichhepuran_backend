@@ -10,7 +10,13 @@ class TeamMember extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    protected $fillable = ['name', 'role', 'bio', 'photo_alt', 'order', 'is_published'];
+    /** Same fixed-Select "which row does this land in" pattern as Partner::GROUPS. */
+    public const GROUPS = [
+        'team' => 'Team',
+        'advisory_board' => 'Advisory Board',
+    ];
+
+    protected $fillable = ['name', 'role', 'bio', 'photo_alt', 'group', 'order', 'is_published'];
 
     protected $casts = [
         'is_published' => 'boolean',

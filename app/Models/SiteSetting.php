@@ -10,19 +10,44 @@ class SiteSetting extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
+    /**
+     * Curated set — lucide-react (this project's general icon library, see
+     * frontend/CLAUDE.md) dropped all brand/logo icons, so social links use
+     * this separate small icon set instead (frontend/src/components/ui/SocialIcon.tsx),
+     * same "fixed Select, not free text" convention as ImpactStat.icon/CsrFeature.icon.
+     */
+    public const SOCIAL_ICON_OPTIONS = [
+        'Facebook' => 'Facebook',
+        'Instagram' => 'Instagram',
+        'LinkedIn' => 'LinkedIn',
+        'Twitter' => 'Twitter / X',
+        'YouTube' => 'YouTube',
+        'WhatsApp' => 'WhatsApp',
+        'Telegram' => 'Telegram',
+        'Pinterest' => 'Pinterest',
+        'Website' => 'Generic website',
+    ];
+
     protected $fillable = [
         'org_name', 'logo_alt', 'tagline', 'phone', 'email', 'address',
         'social_links', 'nav_links', 'donate_href',
+        'whatsapp_enabled', 'whatsapp_number', 'whatsapp_message',
+        'ebook_enabled', 'ebook_label',
+        'call_enabled', 'call_number',
     ];
 
     protected $casts = [
         'social_links' => 'array',
         'nav_links' => 'array',
+        'whatsapp_enabled' => 'boolean',
+        'ebook_enabled' => 'boolean',
+        'call_enabled' => 'boolean',
     ];
 
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('logo')->singleFile()->useDisk('public');
+        $this->addMediaCollection('ebook')->singleFile()->useDisk('public');
     }
 
     /**

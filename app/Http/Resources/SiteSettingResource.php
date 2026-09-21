@@ -25,6 +25,14 @@ class SiteSettingResource extends JsonResource
             'socialLinks' => $this->social_links ?? [],
             'navLinks' => $this->nav_links ?? [],
             'donateHref' => $this->donate_href,
+            'whatsappEnabled' => (bool) $this->whatsapp_enabled,
+            'whatsappNumber' => $this->whatsapp_number,
+            'whatsappMessage' => $this->whatsapp_message,
+            'ebookEnabled' => (bool) $this->ebook_enabled,
+            'ebookLabel' => $this->ebook_label,
+            'ebookUrl' => $this->getFirstMediaUrl('ebook') ?: null,
+            'callEnabled' => (bool) $this->call_enabled,
+            'callNumber' => $this->call_number,
         ];
     }
 }

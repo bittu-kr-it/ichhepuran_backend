@@ -44,6 +44,11 @@ class TeamMemberResource extends Resource
             Forms\Components\TextInput::make('photo_alt')
                 ->label('Photo alt text')
                 ->helperText('Describes the photo for screen readers and search engines, e.g. "Portrait of [Name], [Role]."'),
+            Forms\Components\Select::make('group')
+                ->options(TeamMember::GROUPS)
+                ->default('team')
+                ->required()
+                ->helperText('Which section this person appears in on the About page.'),
             Forms\Components\TextInput::make('order')->numeric()->default(0),
             Forms\Components\Toggle::make('is_published')->default(true),
         ]);
@@ -58,6 +63,9 @@ class TeamMemberResource extends Resource
                     ->circular(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('role'),
+                Tables\Columns\TextColumn::make('group')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => TeamMember::GROUPS[$state] ?? $state),
                 Tables\Columns\IconColumn::make('is_published')->boolean(),
             ])
             ->defaultSort('order');

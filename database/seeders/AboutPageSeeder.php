@@ -84,6 +84,7 @@ class AboutPageSeeder extends Seeder
             'geographic-reach' => ['eyebrow' => 'Where we work', 'heading' => 'Our Geographic Reach'],
             'about-milestones' => ['eyebrow' => 'Our journey', 'heading' => 'Milestones of Impact'],
             'team' => ['eyebrow' => 'The people behind it', 'heading' => 'Meet Our Team'],
+            'advisory-board' => ['eyebrow' => 'Guiding our mission', 'heading' => 'Advisory Board'],
             'trust-badges' => ['eyebrow' => 'Transparency & trust', 'heading' => 'Certified & Accountable'],
         ];
         foreach ($sectionHeadings as $key => $s) {
